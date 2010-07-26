@@ -1,0 +1,34 @@
+Geo::Coder::Many version 0.10
+=================================
+
+Please see the example scripts for more information and 
+usage instructions.
+
+INSTALLATION
+ 
+To install this module type the following:
+ 
+   perl Build.PL
+   ./Build
+   ./Build test
+   ./Build install
+ 
+DEPENDENCIES
+ 
+This module requires these other modules and libraries:
+ 
+  Geo::Coder::* (as required)
+  List::Util::WeightedRoundRobin
+  List::Util
+  List::MoreUtils
+ 
+COPYRIGHT AND LICENCE
+
+Copyright 2010 Lokku Ltd <cpan@lokku.com>
+
+Parts taken from Geo::Coder::Multiple are copyright 2009 Alistair Francis
+<opensource@alizta.com>
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.10 or,
+at your option, any later version of Perl 5 you may have available.
