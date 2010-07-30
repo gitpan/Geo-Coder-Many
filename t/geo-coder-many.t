@@ -12,17 +12,23 @@ General tests of Geo::Coder::Many
 use strict;
 use warnings;
 
+# Set this to zero if you don't want to test third-party geocoders
+my $enable_testing_of_remote_services = 1;
+
 use Test::More tests => 217;
 use Test::MockObject;
 use Test::Exception;
+
 use Geo::Coder::Many;
 use Geo::Coder::Many::Response;
-use Geo::Coder::Many::Util qw( min_precision_filter max_precision_picker consensus_picker country_filter );
+use Geo::Coder::Many::Util qw( min_precision_filter max_precision_picker
+  consensus_picker country_filter );
+
 use HTTP::Response;
 use Net::Ping;
 
-# Picker callback for testing - only accepts a result if there are no more
-# available, always asks for more
+# Example picker callback for testing - only accepts a result if there are no
+# more available, always asks for more
 sub _fussy_picker {
     my ($ra_results, $more_available) = @_;
     if ($more_available) {
@@ -137,7 +143,9 @@ sub setup_geocoder {
     return $geo_many;
 }
 
-
+# Attempts to use a geocoder plugin module - if successful, add it to the array
+# of geocoders to use. If a module is not provided, we just ignore that
+# geocoder.
 sub try_geocoder {
     my ($shortname, $ra_geocoders, %options) = @_;
     my $ref = 'Geo::Coder::' . $shortname;
@@ -250,8 +258,8 @@ sub create_geocoders {
     }
 
     my $p = Net::Ping->new;
-    if ($p->ping('http://www.example.com')) {
-
+    if ($enable_testing_of_remote_services && $p->ping('example.com')) {
+        plan tests => 226;
         lives_ok {
             my $geo_many = &setup_geocoder({
                     filter => 'all',
