@@ -2,7 +2,8 @@ package Geo::Coder::Many::Google;
 
 use strict;
 use warnings;
-
+use Carp;
+use Geo::Coder::Many::Util;
 use base 'Geo::Coder::Many::Generic';
 
 =head1 NAME
@@ -23,26 +24,46 @@ result in a form understandable to Geo::Coder::Many
 
 =cut
 
+# see details of google's response format here:
+# http://code.google.com/apis/maps/documentation/geocoding/
+
 sub geocode {
     my $self = shift;
     my $location = shift;
+    defined $location or croak "Geo::Coder::Many::Google::geocode 
+                                method must be given a location.";
+
 
     my @raw_replies = $self->{GeoCoder}->geocode( $location );
 
     my $Response = Geo::Coder::Many::Response->new( { location => $location } );
 
     foreach my $raw_reply ( @raw_replies ) {
+
+        my $precision = 0; # unknown
+
+        if (defined($raw_reply->{geometry}) 
+            && defined($raw_reply->{geometry}{viewport}) ){
+
+            # lng and lat in decimal degree format            
+            $precision = 
+		Geo::Coder::Many::Util::determine_precision_from_bbox({
+                    'lon1' => $raw_reply->{geometry}{viewport}{southwest}{lng},
+                    'lat1' => $raw_reply->{geometry}{viewport}{southwest}{lat},
+                    'lon2' => $raw_reply->{geometry}{viewport}{northeast}{lng},
+                    'lat2' => $raw_reply->{geometry}{viewport}{northeast}{lat},
+                });
+	}
+
         my $tmp = {
             address   => $raw_reply->{address},
             country   => $raw_reply->{AddressDetails}{Country}{CountryNameCode},
             latitude  => $raw_reply->{Point}{coordinates}[1],
             longitude => $raw_reply->{Point}{coordinates}[0],
-            precision => 1.0,
+            precision => $precision,
         };
-
         $Response->add_response( $tmp, $self->get_name());
-    };
-
+    }
     return $Response;
 }
 
@@ -52,10 +73,7 @@ The short name by which Geo::Coder::Many can refer to this geocoder.
 
 =cut
 
-sub get_name {
-    return 'google';
-}
-
+sub get_name { return 'google'; }
 
 1;
 
