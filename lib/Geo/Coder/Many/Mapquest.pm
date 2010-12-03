@@ -71,8 +71,6 @@ sub geocode {
     my @raw_replies = $self->{GeoCoder}->geocode( location => $location );
     my $response = Geo::Coder::Many::Response->new( { location => $location } );
 
-    my $location_data = [];
-
     foreach my $raw_reply ( @raw_replies ) {
 
 
@@ -99,11 +97,12 @@ sub _determine_precision {
     my $self = shift;
     my $code = shift;
 
+    my $precision = 1; # FIXME!
     # for now all precision set to 1,
     # should instead be converting to meaningful number between 0 and 1
     # based on code
     # see http://www.mapquestapi.com/geocoding/geocodequality.html
-    return 1;  # FIXME!
+    return $precision; 
 }
 
 =head2 get_name
@@ -115,3 +114,5 @@ Returns the name of the geocoder type - used by Geo::Coder::Many
 sub get_name { return 'mapquest'; }
 
 1; 
+
+__END__

@@ -10,6 +10,7 @@ my %geocoders = (
     'Multimap'    => 'Geo::Coder::Multimap',
     'OSM'         => 'Geo::Coder::OSM',
     'PlaceFinder' => 'Geo::Coder::PlaceFinder',
+    'SimpleGeo'   => 'Geo::Coder::SimpleGeo',
     'Yahoo'       => 'Geo::Coder::Yahoo',
 );
 
@@ -22,6 +23,7 @@ my %requires_key = (
     'Multimap'    => 1,
     'OSM'         => 0,
     'PlaceFinder' => 1,
+    'SimpleGeo'   => 1,
     'Yahoo'       => 1,
 );
 
@@ -47,7 +49,7 @@ use_ok('Geo::Coder::Many');
 my @testable_providers;
 foreach my $provider (sort keys %geocoders){
     my $geocoder_module = $geocoders{$provider};
-    note("checking for $geocoder_module");
+    note("checking if we can test using $geocoder_module");
     $num_tests++;
 
     SKIP: {
