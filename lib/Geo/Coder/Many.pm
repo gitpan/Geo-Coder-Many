@@ -5,14 +5,15 @@ use warnings;
 use Carp;
 use Time::HiRes;
 
-our $VERSION = 0.15;
+our $VERSION = 0.16;
 
 use Geo::Coder::Many::Bing;
 use Geo::Coder::Many::Google;
+use Geo::Coder::Many::Mapquest;
 use Geo::Coder::Many::Multimap;
-use Geo::Coder::Many::Yahoo;
-use Geo::Coder::Many::PlaceFinder;
 use Geo::Coder::Many::OSM;
+use Geo::Coder::Many::PlaceFinder;
+use Geo::Coder::Many::Yahoo;
 
 use Geo::Coder::Many::Util qw(
     min_precision_filter 
@@ -20,6 +21,7 @@ use Geo::Coder::Many::Util qw(
     consensus_picker 
     country_filter 
 );
+
 use Geo::Coder::Many::Scheduler::Selective;
 use Geo::Coder::Many::Scheduler::OrderedList;
 use Geo::Coder::Many::Scheduler::UniquenessScheduler::WRR;
@@ -229,7 +231,6 @@ sub add_geocoder {
     my $args = shift;
 
     my $geocoder_ref = ref( $args->{geocoder} );
-
     $geocoder_ref =~ s/Geo::Coder::/Geo::Coder::Many::/x;
 
     eval {
@@ -342,7 +343,7 @@ sub set_picker_callback {
     results_cache   => $cache,
   };
 
-  my $found_location = $geocoder_multi->geocode( $options );
+  my $found_location = $geocoder_many->geocode( $options );
 
 Arguments should be provided in a hash reference with the following entries:
 
@@ -470,6 +471,7 @@ sub geocode {
 
         # Tell the scheduler about how successful the geocoder was
         if (defined $Response) {
+
             my $feedback = { 
                 response_code => $Response->get_response_code(),
             };
@@ -756,16 +758,13 @@ sub _set_in_cache {
     my $Response = shift;
     my $cache    = shift || $self->{cache};
 
-    my $normalized_location = $self->_normalize_location_string( $location );
-    my $location_key = $normalized_location || $location;
-
-    if ( $cache ) {
-        $cache->set( $location_key, $Response );
+    if ($location && $cache){
+	my $key = $self->_normalize_cache_key( $location ) || $location;
+        $cache->set( $key, $Response );
         return 1;
-    };
-
+    }
     return 0;
-};
+}
 
 =head2 _get_from_cache
 
@@ -778,46 +777,38 @@ sub _get_from_cache {
     my $location = shift;
     my $cache = shift || $self->{cache};
 
-    if ( $cache ) {
-        my $normalized_location = $self->_normalize_location_string($location);
-        my $location_key = $normalized_location || $location;
-
-        my $Response = $cache->get( $location_key );
+    if ( $cache && $location ) {
+        my $key = $self->_normalize_cache_key($location) || $location;
+        my $Response = $cache->get( $key );
         if ( $Response ) {
             $Response->{response_code} = 210;
             return $Response;
-        };
-    };
-
+        }
+    }
     return;
-};
+}
 
-=head2 _normalize_location_string
+=head2 _normalize_cache_key
 
 Use the provided normalize_code_ref callback (if one is set) to return a
-normalized version of the given location string.
+normalized string to use as a cache key.
 
 =cut
 
-sub _normalize_location_string {
+sub _normalize_cache_key {
     my $self     = shift;
     my $location = shift;
 
     if ( $self->{normalize_code_ref} ) {
         my $code_ref = $self->{normalize_code_ref};
-        my $normalized_location = $code_ref->( $location ); 
-
-        return $normalized_location;
-    };
-
+        return $code_ref->( $location ); 
+    }
     return $location;
-};
-
+}
 
 1;
 
 __END__
-
 
 =head1 NOTES
 
@@ -841,6 +832,7 @@ Currently supported Geo::Coder::* modules are:
 
   Geo::Coder::Bing
   Geo::Coder::Google
+  Geo::Coder::Mapquest
   Geo::Coder::Multimap
   Geo::Coder::OSM
   Geo::Coder::PlaceFinder
@@ -850,6 +842,7 @@ Currently supported Geo::Coder::* modules are:
 
   Geo::Coder::Bing
   Geo::Coder::Google
+  Geo::Coder::Mapquest
   Geo::Coder::Multimap
   Geo::Coder::OSM
   Geo::Coder::PlaceFinder
@@ -857,10 +850,11 @@ Currently supported Geo::Coder::* modules are:
 
 =head1 AUTHOR
 
-Originally Dan Horgan (http://search.cpan.org/~danhgn/)
-This module is maintained by the team members of Lokku Ltd. (http://www.lokku.com)
+Originally Dan Horgan (http://search.cpan.org/~danhgn/) This module is
+maintained by the team members of Lokku Ltd. (http://www.lokku.com)
 
-Geo::Coder::Many was originally based on Geo::Coder::Multiple
+Geo::Coder::Many was originally based on Geo::Coder::Multiple, which
+unfortunately seems to no longer be maintained
 (by Alistair Francis http://search.cpan.org/~friffin/)
 
 =head1 FEEDBACK
