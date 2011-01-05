@@ -11,6 +11,7 @@ WriteMakefile
                    'Geo::Coder::Mapquest' => '0.04',
                    'Geo::Coder::Multimap' => '0.01',
                    'Geo::Coder::OSM' => '0.01',
+                   'Geo::Coder::Ovi' => '0.01',
                    'Geo::Coder::PlaceFinder' => '0.02',
                    'Geo::Coder::SimpleGeo' => '0.01',
                    'Geo::Coder::Yahoo' => '0.45',
@@ -22,8 +23,8 @@ WriteMakefile
                    'Net::Ping' => '2.33',
                    'Test::Exception' => 0,
                    'Test::MockObject' => 0,
-                   'Test::More' => 0,
                    'Test::Pod::Coverage' => 0,
+                   'Test::Simple' => 0,
                    'Time::HiRes' => '1.9711'
                  },
   'INSTALLDIRS' => 'site',

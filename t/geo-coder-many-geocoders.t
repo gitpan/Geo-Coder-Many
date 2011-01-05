@@ -9,6 +9,7 @@ my %geocoders = (
     'Mapquest'    => 'Geo::Coder::Mapquest',
     'Multimap'    => 'Geo::Coder::Multimap',
     'OSM'         => 'Geo::Coder::OSM',
+    'Ovi'         => 'Geo::Coder::Ovi',
     'PlaceFinder' => 'Geo::Coder::PlaceFinder',
     'SimpleGeo'   => 'Geo::Coder::SimpleGeo',
     'Yahoo'       => 'Geo::Coder::Yahoo',
@@ -22,6 +23,7 @@ my %requires_key = (
     'Mapquest'    => 1,
     'Multimap'    => 1,
     'OSM'         => 0,
+    'Ovi'         => 0,
     'PlaceFinder' => 1,
     'SimpleGeo'   => 1,
     'Yahoo'       => 1,
@@ -70,7 +72,7 @@ if (scalar(@testable_providers)){
     my $GDXS = new Geo::Distance;
    
     my %test_addresses = (	
-        '82 Clerkenwell Road, London EC1M 5RF, United Kingdom' => {
+        'London EC1M 5RF, United Kingdom' => {
             'latitude'  => 51.52262302479371, 
             'longitude' => -0.10244965553283691,
             'threshold' => 0.5, # km  # TODO: make provider specific
