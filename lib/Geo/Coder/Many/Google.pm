@@ -15,6 +15,10 @@ Geo::Coder::Many::Google - Plugin for the google maps geocoder
 This class wraps Geo::Coder::Google such that it can be used in
 Geo::Coder::Many, by converting the results to a standard form.
 
+Note: Geo::Coder::Google uses the deprecated version 2 of the Google
+geocoder. There is a newer Geo::Coder::Googlev3 (also supported by
+Geo::Coder::Many). 
+
 =head1 METHODS
 
 =head2 geocode
@@ -33,7 +37,6 @@ sub geocode {
     my $location = shift;
     defined $location or croak "Geo::Coder::Many::Google::geocode 
                                 method must be given a location.";
-
 
     my @raw_replies = $self->{GeoCoder}->geocode( $location );
 
@@ -79,5 +82,3 @@ The short name by which Geo::Coder::Many can refer to this geocoder.
 sub get_name { return 'google'; }
 
 1;
-
-__END__

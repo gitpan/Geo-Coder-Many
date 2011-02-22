@@ -5,10 +5,11 @@ use warnings;
 use Carp;
 use Time::HiRes;
 
-our $VERSION = 0.19;
+our $VERSION = 0.20;
 
 use Geo::Coder::Many::Bing;
 use Geo::Coder::Many::Google;
+use Geo::Coder::Many::Googlev3;
 use Geo::Coder::Many::Mapquest;
 use Geo::Coder::Many::Multimap;
 use Geo::Coder::Many::OSM;
@@ -189,7 +190,9 @@ sub new {
         use_timeouts        => $args->{use_timeouts},
     };
 
-    if ( !defined $args->{scheduler_type} ) { $self->{scheduler_type} = 'WRR'; }
+    if ( !defined $args->{scheduler_type} ){ 
+	$self->{scheduler_type} = 'WRR'; 
+    }
     if ( $self->{scheduler_type} !~ /OrderedList|WRR|WeightedRandom/x ) {
         carp "Unsupported scheduler type: should be OrderedList or WRR or
               WeightedRandom.";
@@ -199,10 +202,9 @@ sub new {
 
     if ( $args->{cache} ) {
         $self->_set_caching_object( $args->{cache} );
-    };
-
+    }
     return $self;
-};
+}
 
 =head2 add_geocoder
 
@@ -232,6 +234,7 @@ sub add_geocoder {
     my $self = shift;
     my $args = shift;
 
+
     my $geocoder_ref = ref( $args->{geocoder} );
     $geocoder_ref =~ s/Geo::Coder::/Geo::Coder::Many::/x;
 
@@ -248,9 +251,8 @@ sub add_geocoder {
     });
 
     $self->_recalculate_geocoder_stats();
-
     return 1;
-};
+}
 
 =head2 set_filter_callback
 
@@ -462,6 +464,7 @@ sub geocode {
 
         # Check the geocoder has an OK name
         my $geocoder_name = $geocoder->get_name();
+
         if ( $geocoder_name eq $previous_geocoder_name ) {
             carp "The scheduler is bad - it returned two geocoders with the "
                 ."same name, between calls to reset_available!";
@@ -654,17 +657,18 @@ sub _get_next_geocoder {
 sub _recalculate_geocoder_stats {
     my $self = shift;
     
-    my $geocoders = $self->get_geocoders();
-    my $slim_geocoders = [];
+    my $ra_geocoders = $self->get_geocoders();
+    my $ra_slim_geocoders = [];
 
-    foreach my $geocoder ( @{$geocoders} ) {
+    foreach my $geocoder ( @{$ra_geocoders} ) {
+
         my $tmp = {
-            weight  => $geocoder->get_daily_limit(),
+            weight  => $geocoder->get_daily_limit() || 1,
             name    => $geocoder->get_name(),
-        };
-        push @{$slim_geocoders}, $tmp;
+	};
+        push @{$ra_slim_geocoders}, $tmp;
     }
-    $self->{scheduler} = $self->_new_scheduler($slim_geocoders);
+    $self->{scheduler} = $self->_new_scheduler($ra_slim_geocoders);
     return;
 }
 
@@ -764,7 +768,6 @@ sub _get_from_cache {
     return;
 }
 
-
 # _normalize_cache_key
 #
 # Use the provided normalize_code_ref callback (if one is set) to return a
@@ -806,6 +809,7 @@ Currently supported Geo::Coder::* modules are:
 
   Geo::Coder::Bing
   Geo::Coder::Google
+  Geo::Coder::Googlev3
   Geo::Coder::Mapquest
   Geo::Coder::Multimap
   Geo::Coder::OSM
@@ -818,6 +822,7 @@ Currently supported Geo::Coder::* modules are:
 
   Geo::Coder::Bing
   Geo::Coder::Google
+  Geo::Coder::Googlev3
   Geo::Coder::Mapquest
   Geo::Coder::Multimap
   Geo::Coder::OSM
@@ -844,7 +849,7 @@ http://search.cpan.org/~friffin/
 
 =head1 FEEDBACK
 
-Patches are encouraged ! Please send any code (ideally with tests) or
+Patches are encouraged! Please send any code (ideally with tests) or
 feedback to cpan@lokku.com
 
 =head1 ACKNOWLEDGEMENTS
@@ -853,8 +858,8 @@ A number of the feature ideas are taken directly from Tim Bunce's blog:
 
 http://blog.timbunce.org/2010/06/09/high-quality-multi-source-geocoding-in-perl/
 
-(Needless to say, neither he nor anybody else should be held responsible for
-any deficiencies in the implementation!)
+Needless to say, neither he nor anybody else should be held responsible for
+any deficiencies in the implementation!
 
 =head1 YOU MAY ALSO ENJOY
 

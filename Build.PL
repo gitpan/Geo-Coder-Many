@@ -9,12 +9,12 @@ BEGIN {
     $rh_requires = {
         'perl'                           => '5.010',
         'Geo::Distance::XS'              => '0.08',
+        'HTTP::Request'                  => '5.827',
+        'List::MoreUtils'                => '0.22',
         'List::Util::WeightedRoundRobin' => '0.4',
         'List::Util'                     => '1.23',
-        'List::MoreUtils'                => '0.22',
-        'Time::HiRes'                    => '1.9711',
-        'HTTP::Request'                  => '5.827',
         'Net::Ping'                      => '2.33',
+        'Time::HiRes'                    => '1.9711',
     };
 
 # Hack for conditional dependencies.  The geocoder plugins are optional, but if
@@ -24,6 +24,7 @@ BEGIN {
     my %geocoder_min_versions = (
         'Bing'        => '0.10',
         'Google'      => '0.06',
+        'Googlev3'    => '0.01',
         'Mapquest'    => '0.04',
         'Multimap'    => '0.01',
         'OSM'         => '0.01',
