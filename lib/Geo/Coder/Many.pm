@@ -5,7 +5,7 @@ use warnings;
 use Carp;
 use Time::HiRes;
 
-our $VERSION = 0.20;
+our $VERSION = 0.21;
 
 use Geo::Coder::Many::Bing;
 use Geo::Coder::Many::Google;
@@ -36,8 +36,8 @@ Geo::Coder::Many - Module to tie together multiple Geo::Coder::* modules
 
 =head1 DESCRIPTION
 
-Geo::Coder::Many is based on Geo::Coder::Multiple, but tries to be more
-flexible about how the wrapped geocoders are used.
+Geo::Coder::Many provides a single interface to different remote 
+(ie HTTP based) geocoding modules
 
 Amongst other things, Geo::Coder::Many adds geocoder precision information,
 alternative scheduling methods (weighted random, and ordered list), timeouts
@@ -557,18 +557,18 @@ sub geocode {
 =head2 get_geocoders
 
 Returns a reference to a list of the geocoders that have been added to
-the Many geocoder.
+the Many instance
 
 =cut
 
 sub get_geocoders { 
     my $self = shift;
 
-    my $geocoders = [];
-    foreach my $key ( keys %{$self->{geocoders}} ) {
-        push @{$geocoders}, $self->{geocoders}->{$key};
+    my $ra_geocoders = [];
+    foreach my $key ( sort keys %{$self->{geocoders}} ) {
+        push @{$ra_geocoders}, $self->{geocoders}->{$key};
     }
-    return $geocoders;
+    return $ra_geocoders;
 }
 
 
