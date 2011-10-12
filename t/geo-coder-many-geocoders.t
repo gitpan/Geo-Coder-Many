@@ -8,11 +8,9 @@ my %geocoders = (
     'Google'      => 'Geo::Coder::Google',
     'Googlev3'    => 'Geo::Coder::Googlev3',
     'Mapquest'    => 'Geo::Coder::Mapquest',
-    'Multimap'    => 'Geo::Coder::Multimap',
     'OSM'         => 'Geo::Coder::OSM',
     'Ovi'         => 'Geo::Coder::Ovi',
     'PlaceFinder' => 'Geo::Coder::PlaceFinder',
-    'SimpleGeo'   => 'Geo::Coder::SimpleGeo',
 );
 
 # currently we skip geocoders that require a key
@@ -22,11 +20,9 @@ my %requires_key = (
     'Google'      => 1,
     'Googlev3'    => 0,
     'Mapquest'    => 1,
-    'Multimap'    => 1,
     'OSM'         => 0,
     'Ovi'         => 1,
     'PlaceFinder' => 1,
-    'SimpleGeo'   => 1,
 );
 
 my $num_tests = 2;   # Net::Ping and Geo::Coder::Many
