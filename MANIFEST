@@ -30,3 +30,4 @@ t/kwalitee.t
 t/perlcriticrc
 t/pod-coverage.t
 t/pod.t
+META.json                                Module JSON meta-data (added by MakeMaker)

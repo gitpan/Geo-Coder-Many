@@ -6,7 +6,7 @@ use Carp;
 use Time::HiRes;
 use Sort::Versions;
 
-our $VERSION = 0.30;
+our $VERSION = 0.40;
 
 use Geo::Coder::Many::Bing;
 use Geo::Coder::Many::Google;
@@ -744,13 +744,28 @@ sub _test_cache_object {
     my $cache_object = shift;
 
     # Test to ensure the cache works
-    my $result = eval {
-        $cache_object->set( '1234', 'test' );
-        croak unless( $cache_object->get('1234') eq 'test' );
-        1;
-    };
-    if ( (!$result) || $@ ) {
-        croak "Unable to use user provided cache object: ". ref($cache_object);
+    {
+        my $result = eval {
+            $cache_object->set( '1234', 'test' );
+            croak unless( $cache_object->get('1234') eq 'test' );
+            1;
+        };
+        if ( (!$result) || $@ ) {
+            croak "Unable to use user provided cache object: ". ref($cache_object);
+        }
+    }
+
+    # Test to ensure the cache supports references
+    {
+        my $result = eval {
+            $cache_object->set( 'abc', { a => 1, b => 2, c => 3 });
+            croak unless ( $cache_object->get('abc')->{'b'} == 2 );
+            1;
+        };
+        if ( (!$result) || $@ ) {
+            croak "Unable to use user provided cache object "
+                . "(references not stored safely): ", ref($cache_object);
+        }
     }
 
     return;
@@ -817,6 +832,8 @@ __END__
 =head1 NOTES
 
 All cache objects used must support 'get', 'set' and 'remove' methods.
+Additionally they must correctly deal with references by serializing them in
+some way. We recommend using L<CHI|CHI> for this purpose.
 
 The input (location) string is expected to be in utf-8. Incorrectly encoded
 strings will make for unreliable geocoding results. All strings returned will
@@ -887,7 +904,7 @@ any deficiencies in the implementation!
 
 If reducing your dependancy on geo information providers is your thing - and 
 really, who doesn't enjoy breaking dependancy? - you'll
-probably like Mapstraction - http://www.mapstraction.com
+probably like Mapstraction - http://mapstraction.com
 
 =head1 COPYRIGHT AND LICENSE
 

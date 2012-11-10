@@ -24,7 +24,6 @@ BEGIN {
         'Google',
         'Googlev3',
         'Mapquest',
-        'Multimap',
         'OSM',
         'Ovi',
         'PlaceFinder',
@@ -48,7 +47,7 @@ BEGIN {
 
             # If it requires a minimum version, add a dependency
             if ($plugin_name->can("_MIN_MODULE_VERSION")) {
-                $rh_requires->{$module_name} = $plugin_name->MIN_MODULE_VERSION;
+                $rh_requires->{$module_name} = $plugin_name->_MIN_MODULE_VERSION;
             }
         }
     }

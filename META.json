@@ -1,0 +1,52 @@
+{
+   "abstract" : "unknown",
+   "author" : [
+      "unknown"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "ExtUtils::MakeMaker version 6.6302, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "unknown"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Geo-Coder-Many",
+   "no_index" : {
+      "directory" : [
+         "t",
+         "inc"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Geo::Distance::XS" : "0.08",
+            "HTTP::Request" : "5.827",
+            "List::MoreUtils" : "0.22",
+            "List::Util" : "1.23",
+            "List::Util::WeightedRoundRobin" : "0.4",
+            "Net::Ping" : "2.33",
+            "Sort::Versions" : "1.5",
+            "Test::Exception" : "0",
+            "Test::MockObject" : "0",
+            "Test::Pod::Coverage" : "0",
+            "Test::Simple" : "0",
+            "Time::HiRes" : "1.9711"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "version" : "0.4"
+}
