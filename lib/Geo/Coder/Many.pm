@@ -5,8 +5,9 @@ use warnings;
 use Carp;
 use Time::HiRes;
 use Sort::Versions;
+use List::MoreUtils qw(any);
 
-our $VERSION = 0.40;
+our $VERSION = 0.41;
 
 use Geo::Coder::Many::Bing;
 use Geo::Coder::Many::Google;
@@ -472,7 +473,7 @@ sub geocode {
             carp "The scheduler is bad - it returned two geocoders with the "
                 ."same name, between calls to reset_available!";
         }
-        next if ( $geocoder_name ~~ @{$args->{geocoders_to_skip}} );
+        next if ( any { $geocoder_name eq $_ } @{$args->{geocoders_to_skip} || []} );
 
         # Use the current geocoder to geocode the requested location
         my $Response = $geocoder->geocode( $args->{location} );
