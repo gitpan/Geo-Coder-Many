@@ -48,7 +48,7 @@
    "provides" : {
       "Geo::Coder::Many" : {
          "file" : "lib/Geo/Coder/Many.pm",
-         "version" : "0.44"
+         "version" : "0.45"
       },
       "Geo::Coder::Many::Bing" : {
          "file" : "lib/Geo/Coder/Many/Bing.pm",
@@ -124,5 +124,5 @@
          "url" : "https://github.com/lokku/Geo-Coder-Many"
       }
    },
-   "version" : "0.44"
+   "version" : "0.45"
 }

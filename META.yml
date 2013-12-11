@@ -19,7 +19,7 @@ name: Geo-Coder-Many
 provides:
   Geo::Coder::Many:
     file: lib/Geo/Coder/Many.pm
-    version: 0.44
+    version: 0.45
   Geo::Coder::Many::Bing:
     file: lib/Geo/Coder/Many/Bing.pm
     version: 0.02
@@ -85,4 +85,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: https://github.com/lokku/Geo-Coder-Many
-version: 0.44
+version: 0.45
