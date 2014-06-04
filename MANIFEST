@@ -6,6 +6,7 @@ lib/Geo/Coder/Many/Generic.pm
 lib/Geo/Coder/Many/Google.pm
 lib/Geo/Coder/Many/Googlev3.pm
 lib/Geo/Coder/Many/Mapquest.pm
+lib/Geo/Coder/Many/OpenCage.pm
 lib/Geo/Coder/Many/OSM.pm
 lib/Geo/Coder/Many/Ovi.pm
 lib/Geo/Coder/Many/PlaceFinder.pm
@@ -29,5 +30,5 @@ t/perlcriticrc
 t/pod-coverage.t
 t/pod.t
 t/release-cpan-changes.t
-META.yml
-META.json
+META.yml                                 Module YAML meta-data (added by MakeMaker)
+META.json                                Module JSON meta-data (added by MakeMaker)
